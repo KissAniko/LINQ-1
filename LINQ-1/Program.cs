@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,11 +28,39 @@ namespace LINQ_1
 
             List<char> jelek = new List<char> { '+', '-', '0', '0', '+', '-', '0', '0', '+', '+', '-', '0', '0', '+', '+', '+', '-', '-', '+', '-', '+', '+', '-', '0', '0', '+', '+', '-', '0', '-', '+' };
 
+            Console.WriteLine("Hány  '+', '-' és '0' jel van?");
+
+            // Egyik megoldás:
+                Console.WriteLine($"+ -> {jelek.Count(jel => jel == '+')} db");
+                Console.WriteLine($"- -> {jelek.Count(jel => jel == '-')} db");
+                Console.WriteLine($"0 -> {jelek.Count(jel => jel == '0')} db");  
+
+            Console.WriteLine();
+   
+
+           //  Másik megoldás (az eredmény u.a):
+            jelek.GroupBy(x => x)
+                .ToList()
+                .ForEach(x => Console.WriteLine($" {x.Key} -> {x.Count()} db"));  
+
+
+
+    /*       var csoportok = jelek.GroupBy(x => x);
+             foreach ( var csoport in csoportok )
+             {
+                 Console.WriteLine($" {csoport.Key} -> {jelek.Count} db ");
+             }   
+    */
+
+
+            Console.WriteLine();
+//-----------------------------------------------------------------------------------------------------------------------------------------
+
             List<string> diakok = new List<string> { "Kovács Ádám Olivér", "Nagy Béla Gerzson", "Kiss Kinga Noémi", " Papp Dávid", "Sas Márk", "Budavári Kelemen", "Kovács Éva Cecilia", "Nagy Tivadar Dávid" };
            
             List<int> fizetesek = new List<int> { 379000, 450000, 527000, 810000, 450240, 729000, 1180900 };
 
-            List<double> napiCsapadek = new List<double> {5, 16, 22, 3, 0, 22.6, 1.22, 20, 2.17, 22, 0, 12.15, 15, 4, 5, 10, 11, 1, 10, 20, 5, 0.08, 6 };
+            List<double> napiCsapadek = new List<double> {5, 16, 22, 3, 33,  0, 22.6, 1.22, 20, 2.17, 22, 0, 12.15, 30, 15, 4, 5, 10, 11, 31, 1, 10, 20, 5, 0.08, 6 };
 
             List<double> maxHofok = new List<double> {23.6, 20.5, 11, 15, 7.7, 2, 0,  -12.4, -10, -6, 2, 5.9, 8.3, 0, 10, 18.2, 24, 28.8, 25 };
 
@@ -85,6 +114,8 @@ namespace LINQ_1
           
             Console.WriteLine(" 1.feladat: Hány olyan nap volt, amikor 20 fok feletti hőmérsékletet mértek? (2p)");
 
+            //Console.WriteLine("1. feladat: 20 fok feletti hőmérséklet: " + napiCsapadek.Count(x => x > 20) + "nap");
+
             double legmagasabbHomerseklet = maxHofok.Max();
             var db = maxHofok.Count(x => x > 20);
             Console.WriteLine($"\t{db} nap.");
@@ -100,6 +131,13 @@ namespace LINQ_1
 
             Console.WriteLine(" 2.feladat:  Hozzon létre egy új, hőfok szerint csökkenően rendezett listát! (3p)");
 
+
+            /* List<int> ujNapiCsapadek = new List<int>();
+            ujNapiCsapadek = napiCsapadek.Select(x => x).OrderBy(x => x).ToList();
+            Console.Write("2. feladat: Hőfok szerint rendezett lista: ");
+            ujNapiCsapadek.ForEach(x => Console.Write(x + ", "));
+            Console.WriteLine();  */
+
             List<double> ujHofokLista = maxHofok
                                        .OrderByDescending(x => x)
                                        .ToList();
@@ -114,7 +152,10 @@ namespace LINQ_1
 //--------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 3.feladat:  Hány olyan diák van, akiknek két keresztneve van? (3p)");
-            
+
+           /* Console.Write("3. feladat: Két keresztnevű diákok: ");
+            Console.WriteLine(diakok.Count(x => x.Split(" ").Length == 3));  */
+
             int darabszam = diakok.Count(diak => diak.Split(' ').Length == 3);
             Console.WriteLine($"\t{darabszam}  diák.");
 
@@ -149,6 +190,10 @@ namespace LINQ_1
                                          " diákoknak a neveit, akik nevének hossza meghaladja a 15 karaktert.A kiíratás" +
                                           "a nevek hossza szerint növekedve történjen!(5p)");
 
+            /* List<string> hosszuKeresztnev = diakok.Where(n => n.Length > 15).ToList();
+        Console.Write("4. feladat: 15 karakternél hosszabb nevű diákok: ");
+        hosszuKeresztnev.ForEach(x => Console.Write(x + ", "));  */
+
             var nevsor = diakok
                .Where(x => x.Length > 15)
                .OrderBy(x => x.Length);
@@ -162,6 +207,9 @@ namespace LINQ_1
 //---------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 5.feladat:  Hány olyan nap volt, amikor több mint 10mm eső esett? (2p)");
+
+
+           //  Console.Write("5. feladat: Több mint 10mm esős napok száma: " + napiCsapadek.Count(x => x >= 10));
 
             double nap = napiCsapadek
                         .Count(x => x > 10);
@@ -177,6 +225,11 @@ namespace LINQ_1
 //--------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 6.feladat: Rendezze csapadékérték szerint csökkenően a listát! (2p)");
+
+          /*  Console.WriteLine("6. feladat: Csökkenőérték szerinti csapadéklista: ");
+            napiCsapadek = napiCsapadek.OrderByDescending(x => x).ToList();
+            napiCsapadek.ForEach(x => Console.Write(x + ", "));  */
+
             var csapadekertek = napiCsapadek.OrderByDescending(x=> x);
 
             foreach (var csapadek in csapadekertek)
@@ -190,6 +243,11 @@ namespace LINQ_1
 
             Console.WriteLine(" 7.feladat: Készítsen egy új listát aligesett néven, amely a 3mm alatti " +
                                          " csapadékértékeket tartalmazza. (3p)");
+
+        /*    List<int> aligesett = napiCsapadek.Where(x => x < 3).ToList();
+
+            Console.Write("7. feladat: Alig esett lista: ");
+            aligesett.ForEach(x => Console.Write(x + ", ")); */
 
             List<double> aligEsett   = napiCsapadek.Where(x => x < 3)
                                                    .ToList();
@@ -209,6 +267,10 @@ namespace LINQ_1
             Console.WriteLine(" 8.feladat: Rendezze a versenyzőket nevük karakterszáma szerint növekvő sorrendben," +
                                          " azon belül az azonos hosszúságú neveket pedig abc sorrend szerint növekedve!(4p)");
 
+          /*  List<string> versenyzokRendezett = versenyzok.OrderBy(x => x.Length).ThenBy(x => x).ToList();
+            Console.Write("8. feladat: Versenyzők karakterszám és ABC sorrend szerint rendezett lista: ");
+            versenyzokRendezett.ForEach(x => Console.Write(x + ", "));  */
+
             var versenyzo = versenyzok
            .OrderBy(x => x.Length)
            .ThenBy(x => x);
@@ -224,6 +286,9 @@ namespace LINQ_1
 
             Console.WriteLine(" 9.feladat: Hány olyan nap volt, amikor nem eset eső? (2p)");
 
+            // Console.Write("9. feladat: Nem esett eső: " + napiCsapadek.Count(x => x == 0) + "nap");
+
+
             int nemEsett = napiCsapadek.Count(x => x == 0);
 
             Console.WriteLine($"\t{nemEsett} nap nem esett eső.");
@@ -233,6 +298,11 @@ namespace LINQ_1
 
             Console.WriteLine(" 10.feladat: Készítsen egy új listát sokeso néven, amely az 5mm feletti " +
                                           " csapadékértékeket tartalmazza. (3p)");
+
+            /* List<int> sokeso = napiCsapadek.Where(x => x > 5).ToList();
+
+            Console.Write("10. feladat: Sokesős napok: ");
+            sokeso.ForEach(x => Console.Write(x + ", "));   */
 
             List<double> sokEso = napiCsapadek.Where(x => x > 5)
                                               .ToList();
@@ -247,6 +317,11 @@ namespace LINQ_1
 //-----------------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 11.feladat: Listázza ki azoknak a versenyzőknek a nevét, akik keresztneve [Dávid] (4p)");
+
+
+           /*  Console.Write("11. feladat: Versenyzők, akik keresztneve Dávid: ");
+            List<string> vanBenneDavid = versenyzok.Where(x => x.Contains("Dávid")).ToList();
+            vanBenneDavid.ForEach(x => Console.Write(x + ", ")); */
 
             var kivalasztott = diakok.Where(x => x.Contains("Dávid"))
                                .ToList();          
@@ -291,6 +366,9 @@ namespace LINQ_1
 
             Console.WriteLine(" 12.feladat: Mekkora volt a legnagyobb hőmérsékletkülönbség a mérések között? (2p)");
 
+          /*  maxHofok = maxHofok.OrderBy(x => x).ToList();
+            Console.WriteLine("12.feladat: A legnagyobb hőmérsékletkülönbség: " + (maxHofok.Last() - maxHofok.First()));  */
+
             double meres = maxHofok.Max() - maxHofok.Min();
             Console.WriteLine($"\t{meres} fok.");
 
@@ -299,6 +377,9 @@ namespace LINQ_1
 //----------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 13.feladat:Mi volt az év során a második legmagasabb csapadékérték? (3p)");
+
+          /*    napiCsapadek = napiCsapadek.OrderBy(x => x).ToList();
+            Console.WriteLine("13. Második legmagasabb csapadékérték: " + napiCsapadek[1]);  */
 
             int masodikLegmagasabb = (int) napiCsapadek  // add explicit cast... be kell állítani, mert itt enélkül nem működik ---> (int)
                 .OrderByDescending(x => x)       // csökkenő sorrendbe állítjuk
@@ -313,6 +394,8 @@ namespace LINQ_1
 
             Console.WriteLine("14.feladat:Mennyi volt az év során az átlagos csapadékmennyiség?(2p)");
 
+            //  Console.WriteLine("14. feladat: átlagos csapadékmennyiség: " + Math.Round(napiCsapadek.Average(x => x), 1) + "fok");
+
             double atlagCsapadek = napiCsapadek.Average();
             Console.WriteLine($"Az átlagos csapadékmennyiség: " + Math.Round(atlagCsapadek, 2) + "mm");
 
@@ -322,6 +405,7 @@ namespace LINQ_1
 
             Console.WriteLine(" 15.feladat:Van-e a versenyzők között „Szuper Béla” nevű induló? (2p)");
 
+          // Console.WriteLine(versenyzok.Any(x => x.Contains("Szuper Béla")) ? "Van Szuper Béla nevű versenyző" : "Nincs Szuper Béla nevű versenyző. ");
 
             bool vanSzuperBela = versenyzok.Any(x => x == "Szuper Béla");
 
@@ -334,6 +418,7 @@ namespace LINQ_1
                 Console.WriteLine("Nincs Szuper Béla nevű induló.");
             }
 
+            
             Console.WriteLine();
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -341,12 +426,22 @@ namespace LINQ_1
             Console.WriteLine(" 16.feladat:Az év melyik napján (sorszám) esett utoljára 30mm feletti csapadék? (3p)");
 
             // haviCsapadek-ból szerettem volna megcsinálni 
-            Console.WriteLine("\tNem tudom:(");
+            Console.WriteLine (napiCsapadek.FindLastIndex(x => x >= 30) + 1);
             Console.WriteLine();
 
+            Console.WriteLine("Melyik az év első hónapja, mikor 30 mm feletti csapadék esett?");
+            // Dictionary<string, double> haviCsap = new Dictionary<string, double>();
+            // haviCsapadek.ForEach(sor => haviCsap.Add(sor.Split()[0], double.Parse(sor.Split()[0])));
+            Console.WriteLine(haviCsapadek
+                   .FindIndex(sor => double.Parse(sor.Split()[1]) > 30)
+                   .ToString().Split()[0]);
+
+            Console.WriteLine();
 //--------------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 17.feladat:Hány különböző vezetéknevű diák van a listában? (4p)");
+
+            // Console.WriteLine("17. feladat: Különböző vezetéknevű diákok száma: " + diakok.Select(diak => diak.Split(' ')[0]).Distinct().Count());
 
             int nevekSzama = diakok.Select(x => x.Split(' ')[0])  //Kiválasztjuk a vezetékneveket
                                    .Distinct()             // Kiválasztjuk az egyedi vezetékneveket
@@ -359,7 +454,10 @@ namespace LINQ_1
 
             Console.WriteLine(" 18.feladat: Hogyan hívják a legelső olyan versenyzőt, akinek a nevében szerepel a „Vajk”\r\nszó? (3p)");
 
-            string elsoVajk = versenyzok.FirstOrDefault(nev => nev.Contains("Vajk"));
+         // Console.WriteLine("18. feladat: Az első Vajk nevű versenyző: " + versenyzok.First(x => x.Contains("Vajk")));
+
+         // string elsoVajk = versenyzok.FirstOrDefault(nev => nev.Contains("Vajk"), "Ádám");  /* Ha nem találunk 'Vajk'-t, akkor mindenki Ádám lesz ---> ez a Default jelentősége*/ 
+            string elsoVajk = versenyzok.First(nev => nev.Contains("Vajk"));
             Console.WriteLine(elsoVajk);
 
             Console.WriteLine();
@@ -367,6 +465,9 @@ namespace LINQ_1
 //----------------------------------------------------------------------------------------------------------------------
 
             Console.WriteLine(" 19.feladat: Készítsen egy nevek listát, amelyben a diákoknak csak az első keresztnevük\r\nszerepel! (3p)");
+
+            /* List<string> nevek = diakok.Select(x => x.Split(' ')[1]).ToList();
+            nevek.ForEach(x => Console.Write("19. feladat: nevek lista: " + x + ", "));   */
 
             List<string> elsoKeresztNevek = diakok.Select(x => x.Split(' ')[1])
                                                   .ToList();
@@ -381,6 +482,14 @@ namespace LINQ_1
 
             Console.WriteLine(" 20. feladat: Készítsen egy angolul nevű listát fordított névrend" +
                                            " szerint a Béla nevű\r\nversenyzőkről. (4p)");
+
+            /* List<string> angolul = versenyzok
+            .Where(x => x.Contains("Béla"))
+            .Select(x => x.Split(" ")[1] + " " + x.Split(" ")[0])
+            .ToList();
+        Console.Write("20. feladat: Béla nevű versenyzők \"angolul\" listája: ");
+        angolul.ForEach(x => Console.Write(x + ", "));   */
+
 
              List<string> angolul = versenyzok
                                    .Where(nev => nev.Contains("Béla"))
@@ -418,6 +527,6 @@ namespace LINQ_1
         }
 
 
-        }
+    }
 
 }
